@@ -47,8 +47,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(User user) {
+    public void saveUser(User user, String[] newRoles) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        setUserRoles(user, newRoles);
         userDao.saveUser(user);
     }
 
@@ -76,6 +77,7 @@ public class UserServiceImpl implements UserService {
         if (selectedRoles != null) {
             setUserRoles(existingUser, selectedRoles);
         }
+        userDao.updateUser(existingUser);
     }
 
     @Override
@@ -88,20 +90,4 @@ public class UserServiceImpl implements UserService {
             user.setRoles(roleSet);
         }
     }
-
-//    @Transactional
-//    @Override
-//    public void updateUserWithRoles(User user) {
-//        User userUpdated = getUserById(user.getId());
-//        userUpdated.setName(user.getName());
-//        userUpdated.setLastName(user.getLastName());
-//        userUpdated.setAge(user.getAge());
-//        userUpdated.setUsername(user.getUsername());
-//
-//        if (userUpdated.getPassword() != null && !userUpdated.getPassword() .trim().isEmpty()) {
-//            user.setPassword(passwordEncoder.encode(userUpdated.getPassword() ));
-//        }
-//        setUserRoles(user, userUpdated.getSelectedRoles());
-//        updateUser(user);
-//    }
 }
